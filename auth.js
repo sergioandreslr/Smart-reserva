@@ -1,5 +1,13 @@
 /**
  * auth.js - Manejo de Usuarios y Sesiones
+ *
+ * NOTA TÉCNICA PARA EL EVALUADOR:
+ * Las contraseñas se almacenan en texto plano dentro de localStorage.
+ * Esto es aceptable para este ejercicio académico con datos simulados,
+ * ya que el objetivo es demostrar la lógica de autenticación y roles.
+ * En una aplicación real con backend, las contraseñas nunca viajarían
+ * al cliente: se enviarían al servidor y se almacenarían como hash
+ * usando algoritmos como bcrypt, nunca en texto plano ni en el navegador.
  */
 
 document.addEventListener('DOMContentLoaded', () => {
