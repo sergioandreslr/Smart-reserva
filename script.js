@@ -643,7 +643,11 @@ Gracias por elegir Smart Reserva.
         return mapa[ocasion] || ocasion;
     }
 
+    // CORRECCIÓN: se agrega validación defensiva para evitar crash si hora llega undefined o malformada.
+    // La versión original no tenía esta comprobación, lo que podía causar un error en .split(':')
+    // si el valor era null, undefined o una cadena sin ':'.
     function formatearHora(hora24) {
+        if (!hora24 || !hora24.includes(':')) return hora24 || '-';
         const [horaTexto, minutos] = hora24.split(':');
         const horaNumero = Number(horaTexto);
         const periodo = horaNumero >= 12 ? 'pm' : 'am';
