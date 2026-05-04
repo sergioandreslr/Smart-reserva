@@ -1,0 +1,155 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <script src="admin_guard.js"></script>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Panel de Administración - Smart Reserva</title>
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body class="admin-body">
+    <header class="header">
+        <div class="contenedor header-content">
+            <div class="logo-container">
+                <h1 class="logo"><i class="fa-solid fa-shield-halved"></i> Panel de Administración</h1>
+                <p>Gestión completa de reservas</p>
+            </div>
+            <div class="usuario-perfil">
+                <span id="adminNombreDisplay"><i class="fa-solid fa-user-shield"></i> Admin</span>
+                <button onclick="cerrarSesion()" class="btn-cerrar-sesion">
+                    <i class="fa-solid fa-right-from-bracket"></i> Salir
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="contenedor app-main">
+        <section class="pantalla">
+            <h2>Resumen rápido</h2>
+            <div class="admin-kpi-grid">
+                <article class="admin-kpi-card">
+                    <p>Total de reservas</p>
+                    <h3 id="kpiTotal">0</h3>
+                </article>
+                <article class="admin-kpi-card">
+                    <p>Reservas del día</p>
+                    <h3 id="kpiHoy">0</h3>
+                </article>
+                <article class="admin-kpi-card">
+                    <p>Confirmadas</p>
+                    <h3 id="kpiConfirmadas">0</h3>
+                </article>
+                <article class="admin-kpi-card">
+                    <p>Editadas</p>
+                    <h3 id="kpiEditadas">0</h3>
+                </article>
+                <article class="admin-kpi-card">
+                    <p>Canceladas</p>
+                    <h3 id="kpiCanceladas">0</h3>
+                </article>
+            </div>
+        </section>
+
+        <section class="pantalla">
+            <div class="pantalla-header">
+                <h2>Gestión de Reservas</h2>
+            </div>
+
+            <div class="admin-filtros-grid">
+                <div class="grupo-form">
+                    <label for="adminBuscar">Buscar por nombre o correo</label>
+                    <input type="text" id="adminBuscar" placeholder="Ej: juan o correo@dominio.com">
+                </div>
+                <div class="grupo-form">
+                    <label for="adminFechaFiltro">Filtrar por fecha</label>
+                    <input type="date" id="adminFechaFiltro">
+                </div>
+                <div class="grupo-form">
+                    <label for="adminEstadoFiltro">Filtrar por estado</label>
+                    <select id="adminEstadoFiltro">
+                        <option value="">Todos</option>
+                        <option value="Confirmada">Confirmadas</option>
+                        <option value="Editada">Editadas</option>
+                        <option value="Cancelada">Canceladas</option>
+                    </select>
+                </div>
+            </div>
+
+            <div class="admin-table-wrapper">
+                <table class="admin-tabla">
+                    <thead>
+                        <tr>
+                            <th>Cliente</th>
+                            <th>Correo</th>
+                            <th>Personas</th>
+                            <th>Fecha</th>
+                            <th>Hora</th>
+                            <th>Ocasión</th>
+                            <th>Estado</th>
+                            <th>Acciones</th>
+                        </tr>
+                    </thead>
+                    <tbody id="adminTablaBody"></tbody>
+                </table>
+            </div>
+        </section>
+    </main>
+
+    <section id="adminDetalleModal" class="modal-overlay oculto" aria-hidden="true">
+        <div class="modal-panel">
+            <div class="pantalla-header">
+                <h2><i class="fa-solid fa-circle-info"></i> Detalle de reserva</h2>
+                <button type="button" class="btn btn-secundario btn-inline" id="btnCerrarDetalle">Cerrar</button>
+            </div>
+            <div id="adminDetalleContenido"></div>
+        </div>
+    </section>
+
+    <section id="adminEditarModal" class="modal-overlay oculto" aria-hidden="true">
+        <div class="modal-panel">
+            <div class="pantalla-header">
+                <h2><i class="fa-solid fa-pen"></i> Editar reserva</h2>
+                <button type="button" class="btn btn-secundario btn-inline" id="btnCerrarEditarAdmin">Cerrar</button>
+            </div>
+            <form id="adminEditarForm">
+                <input type="hidden" id="adminEditarId">
+                <div class="grupo-form">
+                    <label for="adminEditarPersonas">Número de personas</label>
+                    <input type="number" id="adminEditarPersonas" min="1" required>
+                </div>
+                <div class="grupo-form">
+                    <label for="adminEditarFecha">Fecha</label>
+                    <input type="date" id="adminEditarFecha" required>
+                </div>
+                <div class="grupo-form">
+                    <label for="adminEditarHora">Hora</label>
+                    <select id="adminEditarHora" required></select>
+                </div>
+                <div class="grupo-form">
+                    <label for="adminEditarOcasion">Ocasión especial</label>
+                    <select id="adminEditarOcasion" required>
+                        <option value="Cumpleaños">🎂 Cumpleaños</option>
+                        <option value="Aniversario">💍 Aniversario</option>
+                        <option value="Cena de negocios">💼 Cena de negocios</option>
+                        <option value="Cena romántica">❤️ Cena romántica</option>
+                        <option value="Celebración">🎉 Celebración</option>
+                        <option value="Otra ocasión">✨ Otra ocasión</option>
+                        <option value="Ninguna ocasión especial">🙂 Ninguna ocasión especial</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primario">Guardar cambios</button>
+            </form>
+        </div>
+    </section>
+
+    <div id="adminToast" class="toast oculto" role="status" aria-live="polite"></div>
+
+    <script src="auth.js"></script>
+    <script src="admin.js"></script>
+</body>
+
+</html>

@@ -1,0 +1,52 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Iniciar Sesión - Smart Reserva</title>
+    <!-- Mismos estilos base -->
+    <link rel="stylesheet" href="styles.css">
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+<body class="bg-login">
+
+    <div class="contenedor-auth">
+        <div class="auth-caja seccion-formulario">
+            <div class="auth-header">
+                <h1 class="logo auth-logo"><i class="fa-solid fa-utensils"></i> Smart Reserva</h1>
+                <h2>Iniciar Sesión</h2>
+            </div>
+            
+            <form id="formLogin" class="formulario">
+                <div class="grupo-form">
+                    <label for="emailLogin">Correo Electrónico</label>
+                    <div class="input-con-icono">
+                        <i class="fa-solid fa-envelope"></i>
+                        <input type="email" id="emailLogin" placeholder="tu@correo.com" required>
+                    </div>
+                </div>
+
+                <div class="grupo-form">
+                    <label for="passwordLogin">Contraseña</label>
+                    <div class="input-con-icono">
+                        <i class="fa-solid fa-lock"></i>
+                        <input type="password" id="passwordLogin" placeholder="********" required>
+                    </div>
+                </div>
+
+                <button type="submit" class="btn btn-primario auth-btn">
+                    <i class="fa-solid fa-right-to-bracket"></i> Entrar
+                </button>
+                
+                <p class="auth-enlace">
+                    ¿No tienes cuenta? <a href="registro.html">Regístrate aquí</a>
+                </p>
+            </form>
+        </div>
+    </div>
+
+    <!-- Script de autenticación -->
+    <script src="auth.js"></script>
+</body>
+</html>

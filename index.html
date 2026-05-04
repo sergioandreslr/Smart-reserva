@@ -1,0 +1,194 @@
+<!DOCTYPE html>
+<html lang="es">
+
+<head>
+    <!-- SEGURIDAD: Comprobamos sesión antes de pintar la página -->
+    <script src="auth_guard.js"></script>
+
+    <!-- Metadatos básicos para configuración de idioma y caracteres -->
+    <meta charset="UTF-8">
+    <!-- Viewport para asegurar que el diseño sea responsive en celulares -->
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Smart Reserva - Restaurante Elegance</title>
+
+    <!-- Vinculamos nuestra hoja de estilos externa -->
+    <link rel="stylesheet" href="styles.css">
+
+    <!-- Importamos una fuente elegante desde Google Fonts -->
+    <link href="https://fonts.googleapis.com/css2?family=Montserrat:wght@300;400;600&display=swap" rel="stylesheet">
+    <!-- Iconos de FontAwesome para dar un toque moderno -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+</head>
+
+<body>
+
+    <header class="header">
+        <div class="contenedor header-content">
+            <div class="logo-container">
+                <h1 class="logo"><i class="fa-solid fa-utensils"></i> Smart Reserva</h1>
+                <p>La mejor experiencia gastronómica, a un clic de distancia.</p>
+            </div>
+            <div class="usuario-perfil">
+                <span id="nombreUsuarioDisplay"><i class="fa-solid fa-user-circle"></i> Cargando...</span>
+                <button onclick="cerrarSesion()" class="btn-cerrar-sesion">
+                    <i class="fa-solid fa-right-from-bracket"></i> Salir
+                </button>
+            </div>
+        </div>
+    </header>
+
+    <main class="contenedor app-main">
+        <section id="decisionScreen" class="pantalla">
+            <h2><i class="fa-solid fa-compass"></i> ¿Qué deseas hacer hoy?</h2>
+            <p class="subtitulo">Elige una opción para continuar.</p>
+            <div class="opciones-grid">
+                <article class="opcion-card" id="btnGoMenu" role="button" tabindex="0">
+                    <i class="fa-solid fa-book-open opcion-icono"></i>
+                    <h3>Ver Menú</h3>
+                    <p>Explora nuestra carta con platos destacados y precios.</p>
+                </article>
+                <article class="opcion-card" id="btnGoReserva" role="button" tabindex="0">
+                    <i class="fa-regular fa-calendar-check opcion-icono"></i>
+                    <h3>Hacer Reserva</h3>
+                    <p>Completa un flujo guiado y reserva en pocos pasos.</p>
+                </article>
+            </div>
+        </section>
+
+        <section id="menuScreen" class="pantalla oculto">
+            <div class="pantalla-header">
+                <h2><i class="fa-solid fa-utensils"></i> Carta del Restaurante</h2>
+                <button type="button" class="btn btn-secundario btn-inline" id="btnMenuBack">
+                    <i class="fa-solid fa-arrow-left"></i> Volver
+                </button>
+            </div>
+            <div class="menu-grid" id="menuGrid"></div>
+            <div class="acciones-finales">
+                <button type="button" class="btn btn-primario" id="btnMenuToReserva">
+                    <i class="fa-regular fa-calendar-check"></i> Continuar a Hacer Reserva
+                </button>
+            </div>
+        </section>
+
+        <section id="reservaScreen" class="pantalla oculto">
+            <div class="pantalla-header">
+                <h2><i class="fa-regular fa-calendar-plus"></i> Reserva Paso a Paso</h2>
+                <button type="button" class="btn btn-secundario btn-inline" id="btnReservaBackToDecision">
+                    <i class="fa-solid fa-house"></i> Inicio
+                </button>
+            </div>
+
+            <div class="pasos-indicador">
+                <span class="paso-chip activo" data-step-chip="1">1. Personas</span>
+                <span class="paso-chip" data-step-chip="2">2. Fecha</span>
+                <span class="paso-chip" data-step-chip="3">3. Hora y ocasión</span>
+            </div>
+
+            <form id="wizardReserva" class="seccion-formulario">
+                <div class="paso-contenido" data-step="1">
+                    <h3>Número de personas</h3>
+                    <p>Selecciona cuántas personas asistirán.</p>
+                    <div id="personasOpciones" class="selector-grid">
+                        <button type="button" class="selector-btn" data-personas="1">1</button>
+                        <button type="button" class="selector-btn" data-personas="2">2</button>
+                        <button type="button" class="selector-btn" data-personas="3">3</button>
+                        <button type="button" class="selector-btn" data-personas="4">4</button>
+                        <button type="button" class="selector-btn" data-personas="5+">5+</button>
+                    </div>
+                    <div id="personasCustomContainer" class="grupo-form espacio-superior oculto">
+                        <label for="personasCustomInput">Ingresa el número exacto (mayor a 5)</label>
+                        <input type="number" id="personasCustomInput" min="6" placeholder="Ej: 8">
+                    </div>
+                </div>
+
+                <div class="paso-contenido oculto" data-step="2">
+                    <h3>Fecha de la reserva</h3>
+                    <p>Elige un día disponible.</p>
+                    <div class="grupo-form">
+                        <label for="fechaReserva">Selecciona una fecha</label>
+                        <input type="date" id="fechaReserva" required>
+                    </div>
+                </div>
+
+                <div class="paso-contenido oculto" data-step="3">
+                    <h3>Hora disponible</h3>
+                    <p>Selecciona un horario para tu mesa.</p>
+                    <div id="horasOpciones" class="selector-grid"></div>
+                    <div class="grupo-form espacio-superior">
+                        <label for="ocasionEspecial">Ocasión especial</label>
+                        <select id="ocasionEspecial">
+                            <option value="">Selecciona una ocasión</option>
+                            <option value="Cumpleaños">🎂 Cumpleaños</option>
+                            <option value="Aniversario">💍 Aniversario</option>
+                            <option value="Cena de negocios">💼 Cena de negocios</option>
+                            <option value="Cena romántica">❤️ Cena romántica</option>
+                            <option value="Celebración">🎉 Celebración</option>
+                            <option value="Otra ocasión">✨ Otra ocasión</option>
+                            <option value="Ninguna ocasión especial">🙂 Ninguna ocasión especial</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="wizard-acciones">
+                    <button type="button" class="btn btn-secundario" id="btnWizardPrev">Anterior</button>
+                    <button type="button" class="btn btn-primario" id="btnWizardNext">Siguiente</button>
+                </div>
+            </form>
+        </section>
+
+        <section class="seccion-lista">
+            <h2><i class="fa-solid fa-list-ul"></i> Mis Próximas Reservas</h2>
+            <div id="contenedorReservas" class="contenedor-reservas"></div>
+        </section>
+    </main>
+
+    <section id="editarReservaModal" class="modal-overlay oculto" aria-hidden="true">
+        <div class="modal-panel">
+            <div class="pantalla-header">
+                <h2><i class="fa-solid fa-pen"></i> Editar reserva</h2>
+                <button type="button" class="btn btn-secundario btn-inline" id="btnCerrarModalEditar">Cerrar</button>
+            </div>
+            <form id="formEditarReserva">
+                <input type="hidden" id="editarReservaId">
+                <div class="grupo-form">
+                    <label for="editarPersonas">Número de personas</label>
+                    <input type="number" id="editarPersonas" min="1" required>
+                </div>
+                <div class="grupo-form">
+                    <label for="editarFecha">Fecha</label>
+                    <input type="date" id="editarFecha" disabled>
+                </div>
+                <div class="grupo-form">
+                    <label for="editarHora">Hora</label>
+                    <select id="editarHora" required></select>
+                </div>
+                <div class="grupo-form">
+                    <label for="editarOcasion">Ocasión especial</label>
+                    <select id="editarOcasion" required>
+                        <option value="Cumpleaños">🎂 Cumpleaños</option>
+                        <option value="Aniversario">💍 Aniversario</option>
+                        <option value="Cena de negocios">💼 Cena de negocios</option>
+                        <option value="Cena romántica">❤️ Cena romántica</option>
+                        <option value="Celebración">🎉 Celebración</option>
+                        <option value="Otra ocasión">✨ Otra ocasión</option>
+                        <option value="Ninguna ocasión especial">🙂 Ninguna ocasión especial</option>
+                    </select>
+                </div>
+                <button type="submit" class="btn btn-primario">
+                    <i class="fa-solid fa-check"></i> Guardar cambios
+                </button>
+            </form>
+        </div>
+    </section>
+
+    <div id="toastMensaje" class="toast oculto" role="status" aria-live="polite"></div>
+
+    <footer class="footer">
+        <p>&copy; 2024 Smart Reserva - Proyecto de Aprendizaje SENA.</p>
+    </footer>
+
+    <script src="auth.js"></script>
+    <script src="script.js"></script>
+</body>
+
+</html>
