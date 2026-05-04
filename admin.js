@@ -300,6 +300,7 @@ document.addEventListener('DOMContentLoaded', () => {
         return `${dd}/${mm}/${yyyy}`;
     }
 
+    // CORRECCIÓN: versión defensiva idéntica a la de admin para evitar crash si hora llega undefined
     function formatearHora(hora24) {
         if (!hora24 || !hora24.includes(':')) return hora24 || '-';
         const [h, m] = hora24.split(':');
@@ -378,6 +379,11 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 });
+
+// --- FUNCIONES GLOBALES DE UTILIDAD ---
+// Se declaran fuera del DOMContentLoaded para que admin_guard.js y otros módulos
+// puedan llamarlas sin depender del ciclo de vida del DOM.
+// CORRECCIÓN: leerListaStorage ya no está duplicada dentro del listener de arriba.
 
 function leerSesion() {
     try {
