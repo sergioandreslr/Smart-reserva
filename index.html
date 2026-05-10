@@ -30,6 +30,9 @@
             </div>
             <div class="usuario-perfil">
                 <span id="nombreUsuarioDisplay"><i class="fa-solid fa-user-circle"></i> Cargando...</span>
+                <a id="btnPanelAdmin" href="admin.html" class="btn-panel-admin oculto">
+                    <i class="fa-solid fa-user-shield"></i> Panel Admin
+                </a>
                 <button onclick="cerrarSesion()" class="btn-cerrar-sesion">
                     <i class="fa-solid fa-right-from-bracket"></i> Salir
                 </button>
@@ -184,9 +187,28 @@
     <div id="toastMensaje" class="toast oculto" role="status" aria-live="polite"></div>
 
     <footer class="footer">
-        <p>&copy; 2024 Smart Reserva - Proyecto de Aprendizaje SENA.</p>
+        <div class="contenedor footer-grid">
+            <div class="footer-marca">
+                <p class="footer-logo"><i class="fa-solid fa-utensils"></i> Smart Reserva</p>
+                <p class="footer-desc">La mejor experiencia gastronómica, a un clic de distancia. Reserva tu mesa en minutos.</p>
+            </div>
+            <div>
+                <h4 class="footer-col-titulo">Horarios y ubicación</h4>
+                <p class="footer-item"><i class="fa-solid fa-location-dot"></i> Calle 1 #1-11</p>
+                <p class="footer-item"><i class="fa-regular fa-clock"></i> Todos los días<br>11:00 am — 8:00 pm</p>
+            </div>
+            <div>
+                <h4 class="footer-col-titulo">Contacto</h4>
+                <p class="footer-item"><i class="fa-solid fa-phone"></i> <a href="tel:311234567">311 234 567</a></p>
+                <p class="footer-item"><i class="fa-solid fa-envelope"></i> <a href="mailto:smart@reserva.com">smart@reserva.com</a></p>
+            </div>
+        </div>
+        <div class="footer-copy">
+            <p>&copy; 2026 Smart Reserva &mdash; Todos los derechos reservados.</p>
+        </div>
     </footer>
 
+    <script src="alertas.js"></script>
     <script src="auth.js"></script>
     <script src="script.js"></script>
 </body>

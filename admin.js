@@ -74,6 +74,10 @@ document.addEventListener('DOMContentLoaded', () => {
         }
         if (action === 'cancelar') {
             confirmarCancelacion(id);
+            return;
+        }
+        if (action === 'eliminar') {
+            eliminarReserva(id);
         }
     });
 
@@ -130,9 +134,10 @@ document.addEventListener('DOMContentLoaded', () => {
                 <td>${formatearOcasionConEmoji(reserva.ocasion || 'Ninguna ocasión especial')}</td>
                 <td><span class="badge-estado">${estadoReserva(reserva)}</span></td>
                 <td class="admin-actions">
-                    <button class="btn btn-secundario btn-inline" data-action="detalle" data-id="${reserva.id}">Detalle</button>
-                    <button class="btn btn-primario btn-inline" data-action="editar" data-id="${reserva.id}">Editar</button>
-                    <button class="btn btn-peligro btn-inline" data-action="cancelar" data-id="${reserva.id}">Cancelar</button>
+                    <button class="btn btn-secundario btn-inline" data-action="detalle" data-id="${reserva.id}"><i class="fa-solid fa-eye"></i> Detalle</button>
+                    <button class="btn btn-primario btn-inline" data-action="editar" data-id="${reserva.id}"><i class="fa-solid fa-pen"></i> Editar</button>
+                    <button class="btn btn-peligro btn-inline" data-action="cancelar" data-id="${reserva.id}"><i class="fa-solid fa-ban"></i> Cancelar</button>
+                    <button class="btn btn-eliminar-admin btn-inline" data-action="eliminar" data-id="${reserva.id}"><i class="fa-solid fa-trash-can"></i> Eliminar</button>
                 </td>
             `;
             tablaBody.appendChild(tr);
@@ -238,6 +243,22 @@ document.addEventListener('DOMContentLoaded', () => {
         });
     }
 
+    function eliminarReserva(id) {
+        confirmarAccionAdmin(
+            'Eliminar reserva',
+            'Esta acción es <strong>permanente</strong> y no se puede deshacer. La reserva será borrada definitivamente del sistema.',
+            'Mantener reserva',
+            'Sí, eliminar',
+            'btn-eliminar-confirm'
+        ).then((confirmar) => {
+            if (!confirmar) return;
+            reservas = reservas.filter((r) => r.id !== id);
+            guardarReservas();
+            actualizarDashboard();
+            mostrarToast('Reserva eliminada definitivamente.');
+        });
+    }
+
     function guardarReservas() {
         localStorage.setItem('smart_reservas', JSON.stringify(reservas));
     }
@@ -323,12 +344,14 @@ document.addEventListener('DOMContentLoaded', () => {
         return mapa[ocasion] || ocasion;
     }
 
-    function confirmarAccionAdmin(titulo, mensaje, textoCancelar, textoConfirmar) {
+    function confirmarAccionAdmin(titulo, mensaje, textoCancelar, textoConfirmar, claseConfirm) {
         return new Promise((resolve) => {
             const modalExistente = document.getElementById('adminActionModal');
             if (modalExistente) {
                 modalExistente.remove();
             }
+
+            const claseBotonConfirm = claseConfirm || 'btn-peligro';
 
             const overlay = document.createElement('div');
             overlay.id = 'adminActionModal';
@@ -341,7 +364,7 @@ document.addEventListener('DOMContentLoaded', () => {
                     <p class="cancel-modal-texto">${mensaje}</p>
                     <div class="cancel-modal-acciones">
                         <button type="button" class="btn btn-secundario" id="adminActionCancel">${textoCancelar}</button>
-                        <button type="button" class="btn btn-peligro" id="adminActionConfirm">${textoConfirmar}</button>
+                        <button type="button" class="btn ${claseBotonConfirm}" id="adminActionConfirm">${textoConfirmar}</button>
                     </div>
                 </div>
             `;

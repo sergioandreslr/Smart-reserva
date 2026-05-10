@@ -26,15 +26,15 @@ document.addEventListener('DOMContentLoaded', () => {
 
             const usuarioExiste = usuarios.find(u => u.email === email);
             if (usuarioExiste) {
-                alert('Este correo electrónico ya está registrado.');
+                mostrarAlertaPersonalizada('Este correo electrónico ya está registrado.');
                 return;
             }
 
             usuarios.push({ nombre, email, password, rol: 'cliente' });
             localStorage.setItem('smart_usuarios', JSON.stringify(usuarios));
 
-            alert('¡Registro exitoso! Ahora puedes iniciar sesión.');
-            window.location.href = 'login.html';
+            mostrarAlertaPersonalizada('¡Registro exitoso! Ahora puedes iniciar sesión.', 'exito');
+            setTimeout(() => { window.location.href = 'login.html'; }, 1800);
         });
     }
 
@@ -102,7 +102,7 @@ async function login(email, password) {
 
     // Si no existe, mostrar error
     if (!usuarioValido) {
-        alert('Correo o contraseña incorrectos');
+        mostrarAlertaPersonalizada('Correo o contraseña incorrectos.');
         return;
     }
 
